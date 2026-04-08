@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | MediTrack Pro</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root { 
+            --primary: #2563eb; 
+            --light-blue: #dbeafe;
+            --white: #ffffff;
+            --text-dark: #1e3a8a;
+            --text-gray: #64748b;
+            --bg-soft: #f0f7ff;
+            --border: #e2e8f0;
+        }
+        
+        body { 
+            margin: 0; 
+            font-family: 'Segoe UI', sans-serif; 
+            /* Colorful Medical Background */
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.7), rgba(96, 165, 250, 0.6)), 
+                        url('https://images.unsplash.com/photo-1576091160550-2173dad99901?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-dark); 
+            display: flex; 
+            justify-content: center; 
+            padding: 15px; 
+            min-height: 100vh;
+        }
+        
+        .container { width: 100%; max-width: 500px; }
+        
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .header h1 { font-size: 22px; color: var(--white); margin: 0; font-weight: 800; text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .back-link { text-decoration: none; color: var(--white); font-size: 13px; font-weight: bold; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 8px; }
+
+        /* Settings Group */
+        .settings-section { margin-bottom: 25px; }
+        .section-title { font-size: 12px; font-weight: 800; color: var(--white); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; padding-left: 5px; }
+
+        .settings-list { 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(10px);
+            border-radius: 20px; 
+            border: 2px solid rgba(255, 255, 255, 0.5); 
+            overflow: hidden; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .setting-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px; border-bottom: 1px solid var(--border);
+            cursor: pointer; transition: 0.2s;
+        }
+        .setting-item:last-child { border-bottom: none; }
+        .setting-item:hover { background: var(--bg-soft); }
+
+        .setting-info { display: flex; align-items: center; gap: 15px; }
+        .setting-info i { font-size: 18px; width: 30px; height: 30px; line-height: 30px; text-align: center; color: var(--primary); background: var(--light-blue); border-radius: 8px; }
+        
+        .setting-text h4 { margin: 0; font-size: 14px; font-weight: 700; color: var(--text-dark); }
+        .setting-text p { margin: 2px 0 0; font-size: 11px; color: var(--text-gray); }
+
+        /* Toggle Switch */
+        .switch { position: relative; display: inline-block; width: 38px; height: 22px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(16px); }
+
+        .btn-danger-list { 
+            background: rgba(254, 226, 226, 0.95); 
+            border: 2px solid #fee2e2; 
+            border-radius: 15px; 
+            margin-top: 15px; 
+            text-align: center; 
+            padding: 15px; 
+            font-weight: 800; 
+            color: #ef4444; 
+            cursor: pointer; 
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.1);
+        }
+        .btn-danger-list:hover { background: #fee2e2; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-cog"></i> Settings</h1>
+        <a href="/dashboard" class="back-link"><i class="fas fa-arrow-left"></i> Back</a>
+    </div>
+
+    <div class="settings-section">
+        <div class="section-title">Personal Records</div>
+        <div class="settings-list">
+            <div class="setting-item" onclick="location.href='/dashboard'">
+                <div class="setting-info">
+                    <i class="fas fa-user-md"></i>
+                    <div class="setting-text">
+                        <h4>Profile Information</h4>
+                        <p>Name, Age, Blood Group</p>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-right" style="color: #cbd5e1; font-size: 12px;"></i>
+            </div>
+            <div class="setting-item" onclick="location.href='/security'">
+                <div class="setting-info">
+                    <i class="fas fa-shield-alt"></i>
+                    <div class="setting-text">
+                        <h4>Security & Email</h4>
+                        <p>Update Password & Data</p>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-right" style="color: #cbd5e1; font-size: 12px;"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="settings-section">
+        <div class="section-title">Notifications</div>
+        <div class="settings-list">
+            <div class="setting-item">
+                <div class="setting-info">
+                    <i class="fas fa-bell"></i>
+                    <div class="setting-text">
+                        <h4>Reminders</h4>
+                        <p>Medicine & Appointment alerts</p>
+                    </div>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="setting-item">
+                <div class="setting-info">
+                    <i class="fas fa-cloud-medical"></i>
+                    <div class="setting-text">
+                        <h4>Cloud Sync</h4>
+                        <p>Auto-backup health reports</p>
+                    </div>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="settings-section">
+        <div class="section-title">About App</div>
+        <div class="settings-list">
+            <div class="setting-item">
+                <div class="setting-info">
+                    <i class="fas fa-info-circle"></i>
+                    <div class="setting-text">
+                        <h4>Version</h4>
+                        <p>MediTrack Pro v3.0 (2026)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="btn-danger-list" onclick="location.href='/logout'">
+        <i class="fas fa-power-off"></i> LOG OUT ACCOUNT
+    </div>
+
+    <p style="text-align: center; color: var(--white); margin-top: 30px; font-size: 11px; opacity: 0.8; font-weight: 600;">
+        MediTrack Secure Health Ecosystem
+    </p>
+</div>
+
+</body>
+</html>
