@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | MediTrack Pro</title>
+    
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(255, 255, 255, 0.95); /* Bright white glass effect */
+            --primary-green: #10b981;
+            --hover-green: #059669;
+            --text-dark: #1e293b;
+            --text-gray: #64748b;
+            --border-color: #cbd5e1;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Colorful Medical Background with Vibrant Overlay */
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.8), rgba(37, 99, 235, 0.7)), 
+                        url('https://images.unsplash.com/photo-1576091160550-2173dad99901?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .register-container {
+            background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            padding: 35px;
+            border-radius: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+            margin: 20px;
+            color: var(--text-dark); /* Dark text for white background */
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 5px;
+            color: #065f46; /* Deep green */
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: var(--text-gray);
+            margin-bottom: 25px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            background: #f8fafc;
+            border: 1.5px solid var(--border-color);
+            border-radius: 10px;
+            color: #1e293b;
+            font-size: 14px;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            background: #ffffff;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);
+        }
+
+        .row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .row .form-group {
+            flex: 1;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(to right, var(--primary-green), #059669);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            color: var(--text-gray);
+        }
+
+        .login-link a {
+            color: var(--primary-green);
+            text-decoration: none;
+            font-weight: 800;
+        }
+
+        .error-msg {
+            color: #ef4444;
+            font-size: 11px;
+            margin-top: 4px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="register-container">
+        <h2>Create Account</h2>
+        <p class="subtitle">Join MediTrack Pro to manage your health records.</p>
+
+        <form id="regForm" action="/register_logic" method="POST" onsubmit="return validateForm()">
+            
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" name="name" id="name" placeholder="Enter your name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" name="email" id="email" placeholder="name@example.com" required>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" name="phone" id="phone" placeholder="9876543210" required>
+                </div>
+                <div class="form-group">
+                    <label>Age</label>
+                    <input type="number" name="age" id="age" min="1" max="120" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label>Gender</label>
+                    <select name="gender" required>
+                        <option value="" disabled selected>Select</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Blood Group</label>
+                    <input type="text" name="blood" id="blood" placeholder="e.g. O+" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Create Password</label>
+                <input type="password" name="password" id="password" placeholder="••••••••" required>
+                <p id="pwdError" class="error-msg">Password must be at least 6 characters long.</p>
+            </div>
+
+            <button type="submit">REGISTER NOW</button>
+
+            <div class="login-link">
+                Already have an account? <a href="/login">Login here</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function validateForm() {
+            const password = document.getElementById('password').value;
+            const phone = document.getElementById('phone').value;
+            const pwdError = document.getElementById('pwdError');
+            
+            let isValid = true;
+
+            if (password.length < 6) {
+                pwdError.style.display = 'block';
+                isValid = false;
+            } else {
+                pwdError.style.display = 'none';
+            }
+
+            if (phone.length < 10) {
+                alert("Please enter a valid 10-digit phone number.");
+                isValid = false;
+            }
+
+            return isValid;
+        }
+    </script>
+
+</body>
+</html>
