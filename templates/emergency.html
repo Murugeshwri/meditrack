@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency SOS | MediTrack Pro</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root { 
+            --bg-overlay: rgba(15, 23, 42, 0.8); 
+            --card-bg: rgba(255, 255, 255, 0.95); 
+            --sos-red: #ef4444; 
+            --sos-hover: #dc2626; 
+            --text-main: #1e293b; 
+            --text-dim: #64748b; 
+        }
+        
+        body { 
+            margin: 0; 
+            font-family: 'Segoe UI', sans-serif; 
+            /* Colorful Medical Emergency Background sethachu */
+            background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), 
+                        url('https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-main); 
+            display: flex; 
+            justify-content: center; 
+            padding: 15px; 
+            font-size: 13px; 
+            min-height: 100vh;
+        }
+        
+        .container { width: 100%; max-width: 450px; text-align: center; }
+        
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .header h1 { font-size: 22px; color: var(--sos-red); margin: 0; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 800; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .back-link { text-decoration: none; color: #ffffff; font-size: 13px; font-weight: bold; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 8px; }
+
+        /* SOS Button Animation */
+        .sos-circle {
+            width: 160px; height: 160px; background: var(--sos-red); border-radius: 50%;
+            margin: 30px auto; display: flex; align-items: center; justify-content: center;
+            font-size: 28px; font-weight: 900; color: white; cursor: pointer;
+            box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+            animation: pulse 1.5s infinite; border: 8px solid rgba(255,255,255,0.3);
+            transition: 0.3s;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .sos-circle:active { transform: scale(0.9); }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 35px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        /* Emergency Contacts with Bright White Cards */
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
+        .contact-card {
+            background: var(--card-bg); 
+            backdrop-filter: blur(10px);
+            padding: 20px; 
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.5); 
+            text-decoration: none; 
+            color: var(--text-main);
+            transition: 0.3s; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .contact-card:hover { background: #ffffff; transform: translateY(-5px); border-color: var(--sos-red); }
+        .contact-card i { font-size: 28px; margin-bottom: 10px; color: var(--sos-red); }
+        .contact-card span { font-weight: 800; font-size: 15px; }
+        .contact-card small { color: var(--text-dim); font-size: 11px; margin-top: 4px; font-weight: 600; }
+
+        /* Location Card */
+        .loc-card {
+            background: rgba(255, 255, 255, 0.9); 
+            padding: 15px; 
+            border-radius: 15px;
+            margin-top: 25px; 
+            border: 1px dashed var(--sos-red); 
+            display: flex;
+            align-items: center; 
+            justify-content: center; 
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .status-msg { color: #fef08a; font-weight: 800; margin-top: 15px; display: none; text-shadow: 0 1px 5px rgba(0,0,0,0.5); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-exclamation-triangle"></i> Emergency Hub</h1>
+        <a href="/dashboard" class="back-link"><i class="fas fa-arrow-left"></i> Back</a>
+    </div>
+
+    <p style="color: #ffffff; margin-bottom: 5px; font-weight: 600;">In case of emergency, press SOS</p>
+    
+    <div class="sos-circle" onclick="triggerSOS()">
+        SOS
+    </div>
+    
+    <div id="statusMsg" class="status-msg">
+        <i class="fas fa-spinner fa-spin"></i> Sending Alerts to Family...
+    </div>
+
+    <div class="loc-card">
+        <i class="fas fa-map-marker-alt" style="color: var(--sos-red);"></i>
+        <span id="locationTxt" style="font-size: 13px; color: var(--text-main); font-weight: 700;">GPS Location: Checking...</span>
+    </div>
+
+    <div class="contact-grid">
+        <a href="tel:108" class="contact-card">
+            <i class="fas fa-ambulance"></i>
+            <span>Ambulance</span>
+            <small>Call 108</small>
+        </a>
+        
+        <a href="tel:102" class="contact-card">
+            <i class="fas fa-hospital-alt"></i>
+            <span>Hospital</span>
+            <small>Nearby Clinic</small>
+        </a>
+
+        <a href="tel:9876543210" class="contact-card">
+            <i class="fas fa-heart"></i>
+            <span>Guardian</span>
+            <small>Family Primary</small>
+        </a>
+
+        <a href="#" class="contact-card">
+            <i class="fas fa-pills"></i>
+            <span>Pharmacy</span>
+            <small>24/7 Service</small>
+        </a>
+    </div>
+
+    <p style="margin-top: 30px; font-size: 12px; color: #ffffff; font-weight: 500; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px;">
+        * SOS will send your current location to all added family members.
+    </p>
+</div>
+
+<script>
+    function triggerSOS() {
+        const msg = document.getElementById('statusMsg');
+        msg.style.display = 'block';
+        
+        setTimeout(() => {
+            msg.innerHTML = "<i class='fas fa-check-circle' style='color:#4ade80;'></i> Alerts Sent Successfully!";
+            alert("EMERGENCY ALERT: Your family members have been notified with your current location.");
+        }, 2000);
+        
+        if (navigator.vibrate) {
+            navigator.vibrate([500, 200, 500]);
+        }
+    }
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((pos) => {
+                document.getElementById('locationTxt').innerText = 
+                    `Lat: ${pos.coords.latitude.toFixed(4)}, Long: ${pos.coords.longitude.toFixed(4)}`;
+            }, () => {
+                document.getElementById('locationTxt').innerText = "Location access denied.";
+            });
+        } else {
+            document.getElementById('locationTxt').innerText = "GPS not supported.";
+        }
+    }
+
+    window.onload = getLocation;
+</script>
+
+</body>
+</html>
