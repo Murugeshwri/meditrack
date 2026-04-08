@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediTrack | AM-PM Alarm</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root { 
+            --bg-overlay: rgba(15, 23, 42, 0.8); 
+            --card-bg: rgba(255, 255, 255, 0.95); 
+            --primary: #10b981; 
+            --text-main: #1e293b; 
+            --text-dim: #64748b; 
+            --danger: #ef4444; 
+        }
+        body { 
+            margin: 0; 
+            font-family: 'Segoe UI', sans-serif; 
+            /* Colorful Medical Background sethachu */
+            background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), 
+            url('https://images.unsplash.com/photo-1584017911766-d451b3d0e843?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-main); 
+            display: flex; 
+            justify-content: center; 
+            padding: 15px; 
+            min-height: 100vh;
+        }
+        .container { width: 100%; max-width: 450px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .header h1 { font-size: 22px; color: #ffffff; margin: 0; font-weight: 800; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .back-btn { text-decoration: none; color: #ffffff; font-size: 13px; font-weight: bold; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 8px; }
+        /* Bright Glass Input Box */
+        .add-box { 
+            background: var(--card-bg); 
+            backdrop-filter: blur(10px);
+            padding: 20px; 
+            border-radius: 20px; 
+            margin-bottom: 20px; 
+            border: 2px solid rgba(255, 255, 255, 0.5); 
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+        .input-group { margin-bottom: 12px; }
+        label { display: block; font-size: 12px; margin-bottom: 5px; color: var(--text-dim); font-weight: bold; text-transform: uppercase; }
+        input, select { 
+            width: 100%; 
+            padding: 12px; 
+            background: #f1f5f9; 
+            border: 2px solid #e2e8f0; 
+            border-radius: 10px; 
+            color: #1e293b; 
+            box-sizing: border-box; 
+            font-size: 14px; 
+            outline: none;
+            transition: 0.3s;
+        }
+        input:focus { border-color: var(--primary); background: #ffffff; }
+        .time-setter { display: flex; gap: 8px; align-items: center; }
+        .time-setter input { text-align: center; }
+        .btn-add { 
+            width: 100%; 
+            padding: 14px; 
+            background: linear-gradient(to right, var(--primary), #059669); 
+            border: none; 
+            border-radius: 12px; 
+            color: white; 
+            font-weight: bold; 
+            cursor: pointer; 
+            margin-top: 10px; 
+            font-size: 15px; 
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+            transition: 0.3s;
+        }
+        .btn-add:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4); }
+  /* Medicine Cards List */
+        .med-card { 
+            background: rgba(255, 255, 255, 0.9); 
+            padding: 15px; 
+            border-radius: 15px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-left: 5px solid var(--primary); 
+            margin-bottom: 10px; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }  
+        .med-info h3 { margin: 0; font-size: 16px; color: #1e293b; font-weight: 700; }
+        .med-info p { margin: 4px 0 0; font-size: 12px; color: var(--text-dim); }
+        .alarm-tag { color: #d97706; font-weight: 800; font-size: 13px; }
+        .delete-btn { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 18px; transition: 0.2s; }
+        .delete-btn:hover { transform: scale(1.1); }
+        /* Alarm Overlay */
+        #alarmOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.95); z-index: 9999; text-align: center; }
+        .alarm-box { 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            width: 85%; padding: 35px; border-radius: 30px; 
+            background: #ffffff; border: 4px solid var(--primary); 
+            box-shadow: 0 0 50px rgba(16, 185, 129, 0.5);
+        }
+        </style>
+</head>
+<body>
+<audio id="alarmSound" loop>
+    <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
+</audio>
+<div id="alarmOverlay">
+    <div class="alarm-box">
+        <i class="fas fa-clock" style="font-size: 50px; color: #fbbf24; animation: shake 0.5s infinite;"></i>
+        <h2 style="color: #1e293b; margin: 15px 0; font-weight: 800;">TIME FOR MEDICINE!</h2>
+        <p id="alarmMedName" style="font-size: 24px; font-weight: 900; color: var(--primary); text-transform: uppercase;"></p>
+        <button onclick="stopAlarm()" class="btn-add" style="background: var(--danger); margin-top: 25px;">DISMISS ALARM</button>
+    </div>
+</div>
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-pills"></i> Medicine Hub</h1>
+        <a href="/dashboard" class="back-btn"><i class="fas fa-arrow-left"></i> Dashboard</a>
+    </div>
+    <div class="add-box">
+        <div class="input-group">
+            <label>Medicine Name</label>
+            <input type="text" id="medName" placeholder="Paracetamol, etc.">
+        </div>
+        <label>Set Time (HH : MM : AM/PM)</label>
+        <div class="time-setter">
+            <input type="number" id="hr" placeholder="12" min="1" max="12" style="flex: 1;">
+            <span style="font-weight: bold; color: var(--text-dim);">:</span>
+            <input type="number" id="min" placeholder="00" min="0" max="59" style="flex: 1;">
+            <select id="ampm" style="flex: 1.2;">
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+            </select>
+        </div>
+        <button class="btn-add" onclick="addMedicine()">SET REMINDER</button>
+    </div>
+    <div id="medList"></div>
+</div>
+<script>
+    let medicines = JSON.parse(localStorage.getItem('medAlarms_v3')) || [];
+    const audio = document.getElementById('alarmSound');
+    function displayMedicines() {
+        const list = document.getElementById('medList');
+        list.innerHTML = '';
+        medicines.forEach((med, index) => {
+            list.innerHTML += `
+                <div class="med-card">
+                    <div class="med-info">
+                        <h3>${med.name}</h3>
+                    <p><i class="fas fa-bell"></i> <span class="alarm-tag">${med.displayTime}</span></p>
+                    </div>
+                    <button class="delete-btn" onclick="deleteMed(${index})">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>               
+                `;       
+             });
+        localStorage.setItem('medAlarms_v3', JSON.stringify(medicines));
+    }
+    function addMedicine() {
+        const name = document.getElementById('medName').value;
+        let h = document.getElementById('hr').value;
+        let m = document.getElementById('min').value;
+        const ap = document.getElementById('ampm').value;
+        if (name && h && m) {
+            h = parseInt(h);
+            m = m.toString().padStart(2, '0');
+            let checkH = h;
+            if (ap === "PM" && h < 12) checkH += 12;
+            if (ap === "AM" && h === 12) checkH = 0;
+            const internalTime = `${checkH.toString().padStart(2, '0')}:${m}`;
+            const displayTime = `${h}:${m} ${ap}`;
+            medicines.push({ name, time: internalTime, displayTime, alerted: false });
+            document.getElementById('medName').value = '';
+            document.getElementById('hr').value = '';
+            document.getElementById('min').value = '';
+            displayMedicines();
+            audio.play().then(() => audio.pause()); 
+        } else {
+            alert("Please enter Name and Time!");
+        }
+    }
+    function deleteMed(index) {
+        if(confirm("Delete this reminder?")) {
+            medicines.splice(index, 1);
+            displayMedicines();
+        }
+    }
+    setInterval(() => {
+        const now = new Date();
+        const cur = now.getHours().toString().padStart(2, '0') + ":" + 
+                    now.getMinutes().toString().padStart(2, '0');
+        medicines.forEach(med => {
+            if (med.time === cur && !med.alerted) {
+                document.getElementById('alarmMedName').innerText = med.name;
+                document.getElementById('alarmOverlay').style.display = 'block';
+                audio.play();
+                med.alerted = true;
+            }
+            if (med.time !== cur) med.alerted = false;
+        });
+    }, 1000);
+    function stopAlarm() {
+        document.getElementById('alarmOverlay').style.display = 'none';
+        audio.pause();
+        audio.currentTime = 0;
+    }
+    displayMedicines();
+</script>
+<style>
+    @keyframes shake {
+        0% { transform: rotate(0deg); }
+        25% { transform: rotate(5deg); }
+        50% { transform: rotate(0deg); }
+        75% { transform: rotate(-5deg); }
+
+        100% { transform: rotate(0deg); }
+    }
+</style>
+</body>
+</html>
