@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Reports | MediTrack Pro</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root { 
+            --bg-overlay: rgba(15, 23, 42, 0.8); 
+            --card-bg: rgba(255, 255, 255, 0.95); 
+            --primary: #f59e0b; 
+            --blue: #3b82f6; 
+            --green: #10b981; 
+            --red: #ef4444; 
+            --text-main: #1e293b; 
+            --text-dim: #64748b; 
+        }
+        
+        body { 
+            margin: 0; 
+            font-family: 'Segoe UI', sans-serif; 
+            /* Colorful Medical Lab Background sethachu */
+            background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), 
+                        url('https://images.unsplash.com/photo-1579154235602-3c3e806c9e0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-main); 
+            display: flex; 
+            justify-content: center; 
+            padding: 15px; 
+            font-size: 13px; 
+            min-height: 100vh;
+        }
+        
+        .container { width: 100%; max-width: 550px; }
+        
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .header h1 { font-size: 22px; color: #ffffff; margin: 0; font-weight: 800; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .back-link { text-decoration: none; color: #ffffff; font-size: 13px; font-weight: bold; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 8px; }
+
+        /* Bright Glass Report Form */
+        .report-form { 
+            background: var(--card-bg); 
+            backdrop-filter: blur(10px);
+            padding: 20px; 
+            border-radius: 20px; 
+            margin-bottom: 25px; 
+            border: 2px solid rgba(255, 255, 255, 0.5); 
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); 
+        }
+        
+        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+        
+        label { display: block; font-size: 12px; margin-bottom: 5px; color: var(--text-dim); font-weight: 700; text-transform: uppercase; }
+        input, select { 
+            width: 100%; 
+            padding: 12px; 
+            background: #f1f5f9; 
+            border: 2px solid #e2e8f0; 
+            border-radius: 10px; 
+            color: #1e293b; 
+            box-sizing: border-box; 
+            font-size: 13px; 
+            outline: none; 
+            transition: 0.3s;
+        }
+        input:focus { border-color: var(--primary); background: #ffffff; }
+
+        .file-upload { 
+            border: 2px dashed #cbd5e1; 
+            padding: 20px; 
+            text-align: center; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            margin-bottom: 15px; 
+            background: #f8fafc;
+        }
+        .file-upload:hover { border-color: var(--blue); background: #f0f7ff; }
+
+        .btn-save { 
+            width: 100%; 
+            padding: 14px; 
+            background: var(--primary); 
+            border: none; 
+            border-radius: 12px; 
+            color: #ffffff; 
+            font-weight: 800; 
+            cursor: pointer; 
+            font-size: 15px; 
+            text-transform: uppercase; 
+            transition: 0.3s; 
+            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);
+        }
+        .btn-save:hover { background: #d97706; transform: translateY(-2px); }
+
+        /* Report Item List with Bright Cards */
+        .report-item { 
+            background: rgba(255, 255, 255, 0.9); 
+            padding: 15px; 
+            border-radius: 15px; 
+            margin-bottom: 12px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start; 
+            border-right: 5px solid var(--blue); 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: 0.3s; 
+        }
+        
+        .report-content h3 { margin: 0 0 5px 0; font-size: 16px; color: #1e293b; font-weight: 700; }
+        .report-content p { margin: 3px 0; font-size: 12px; color: var(--text-dim); font-weight: 500; }
+        
+        .status-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+        .normal { background: var(--green); }
+        .abnormal { background: var(--red); }
+
+        .btn-delete { color: var(--red); cursor: pointer; background: none; border: none; font-size: 18px; padding: 5px; opacity: 0.8; }
+        .btn-delete:hover { opacity: 1; transform: scale(1.1); }
+        
+        .empty-state { text-align: center; padding: 40px; color: #ffffff; font-weight: 600; text-shadow: 0 1px 5px rgba(0,0,0,0.5); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-file-medical-alt"></i> Medical Reports</h1>
+        <a href="/dashboard" class="back-link"><i class="fas fa-arrow-left"></i> Back</a>
+    </div>
+
+    <div class="report-form">
+        <div class="input-group" style="margin-bottom: 15px;">
+            <label>Report Name / Lab Type</label>
+            <input type="text" id="repName" placeholder="e.g. Blood Sugar Test">
+        </div>
+        
+        <div class="grid-inputs">
+            <div class="input-group">
+                <label>Value / Result</label>
+                <input type="text" id="repValue" placeholder="e.g. 110 mg/dL">
+            </div>
+            <div class="input-group">
+                <label>Status</label>
+                <select id="repStatus">
+                    <option value="Normal">Normal</option>
+                    <option value="Abnormal">Abnormal / High</option>
+                    <option value="Critical">Critical</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="input-group" style="margin-bottom: 15px;">
+            <label>Date of Report</label>
+            <input type="date" id="repDate">
+        </div>
+
+        <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+            <input type="file" id="fileInput" style="display:none">
+            <i class="fas fa-cloud-upload-alt" style="font-size: 28px; color: var(--blue);"></i>
+            <p style="margin: 8px 0 0 0; font-size: 13px; color: var(--text-dim); font-weight: 600;">Attach PDF or Photo</p>
+        </div>
+
+        <button class="btn-save" onclick="saveReport()">SAVE REPORT</button>
+    </div>
+
+    <div style="font-weight: 800; margin-bottom: 12px; color: #ffffff; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase;">Past Lab Records</div>
+    <div id="reportList"></div>
+</div>
+
+<script>
+    let reports = JSON.parse(localStorage.getItem('mediReports')) || [];
+
+    function displayReports() {
+        const list = document.getElementById('reportList');
+        list.innerHTML = '';
+
+        if (reports.length === 0) {
+            list.innerHTML = `<div class="empty-state"><i class="fas fa-folder-open" style="font-size: 40px; display: block; margin-bottom: 10px;"></i>No reports saved yet.</div>`;
+            return;
+        }
+
+        reports.forEach((rep, index) => {
+            const statusClass = rep.status === 'Normal' ? 'normal' : 'abnormal';
+            list.innerHTML += `
+                <div class="report-item">
+                    <div class="report-content">
+                        <h3>${rep.name}</h3>
+                        <p><i class="far fa-calendar-alt"></i> ${rep.date}</p>
+                        <p><span class="status-dot ${statusClass}"></span><strong>Result:</strong> ${rep.value} (${rep.status})</p>
+                        ${rep.hasFile ? '<p style="color:var(--blue); font-weight:700;"><i class="fas fa-paperclip"></i> Attachment Linked</p>' : ''}
+                    </div>
+                    <button class="btn-delete" onclick="deleteReport(${index})"><i class="fas fa-trash-alt"></i></button>
+                </div>
+            `;
+        });
+        localStorage.setItem('mediReports', JSON.stringify(reports));
+    }
+
+    function saveReport() {
+        const name = document.getElementById('repName').value;
+        const value = document.getElementById('repValue').value;
+        const status = document.getElementById('repStatus').value;
+        const date = document.getElementById('repDate').value;
+        const file = document.getElementById('fileInput').files[0];
+
+        if (name && value && date) {
+            reports.push({
+                name,
+                value,
+                status,
+                date,
+                hasFile: file ? true : false
+            });
+
+            document.getElementById('repName').value = '';
+            document.getElementById('repValue').value = '';
+            document.getElementById('repDate').value = '';
+            document.getElementById('fileInput').value = '';
+            
+            displayReports();
+            alert("Medical Report Saved!");
+        } else {
+            alert("Please enter Name, Result and Date.");
+        }
+    }
+
+    function deleteReport(index) {
+        if(confirm("Delete this record?")) {
+            reports.splice(index, 1);
+            displayReports();
+        }
+    }
+
+    displayReports();
+</script>
+
+</body>
+</html>
