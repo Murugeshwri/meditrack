@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login | MediTrack Pro</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            /* Colorful Medical Background with Soft Overlay */
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.7), rgba(96, 165, 250, 0.6)), 
+                        url('https://images.unsplash.com/photo-1584981485782-2fe99bdad61f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            
+            color: #1e3a8a; 
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh; 
+            margin: 0;
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.9); /* Bright White Glass Effect */
+            backdrop-filter: blur(10px);
+            padding: 40px; 
+            border-radius: 30px; 
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            width: 360px; 
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+
+        .logo-area {
+            font-size: 45px;
+            color: #2563eb;
+            margin-bottom: 10px;
+        }
+
+        h2 { 
+            color: #1e3a8a; 
+            margin: 0 0 30px 0; 
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: 100%; 
+            padding: 14px 15px; 
+            background: #f0f7ff;
+            border: 2px solid #dbeafe; 
+            border-radius: 15px; 
+            color: #1e3a8a; 
+            box-sizing: border-box;
+            outline: none;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        input:focus { 
+            border-color: #2563eb; 
+            background: #ffffff;
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.1);
+        }
+
+        button {
+            width: 100%; 
+            padding: 15px; 
+            background: linear-gradient(to right, #2563eb, #3b82f6);
+            color: white; 
+            border: none;
+            border-radius: 15px; 
+            font-weight: bold; 
+            font-size: 16px;
+            cursor: pointer; 
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+            transition: 0.3s;
+        }
+
+        button:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .footer { 
+            text-align: center; 
+            margin-top: 25px; 
+            font-size: 14px; 
+            color: #64748b; 
+        }
+
+        a { 
+            color: #2563eb; 
+            text-decoration: none; 
+            font-weight: 700; 
+        }
+
+        a:hover { 
+            text-decoration: underline; 
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <div class="logo-area">
+            <i class="fas fa-hand-holding-medical"></i>
+        </div>
+        <h2>Secure Login</h2>
+        <form action="/login_logic" method="POST">
+            <div class="input-group">
+                <input type="email" name="email" placeholder="Email Address" required>
+            </div>
+            <div class="input-group">
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+            <button type="submit">ACCESS DASHBOARD</button>
+        </form>
+        <div class="footer">
+            New user? <a href="/register">Create Account</a>
+        </div>
+    </div>
+</body>
+</html>
